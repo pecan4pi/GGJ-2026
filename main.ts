@@ -3,6 +3,11 @@ enum ActionKind {
     Idle,
     Jumping
 }
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (InGame) {
+        TimeHeldA = game.runtime()
+    }
+})
 function Animations () {
     platformer.loopFrames(
     mySprite,
@@ -77,12 +82,15 @@ function Animations () {
     platformer.rule(platformer.PlatformerSpriteState.FacingRight, platformer.PlatformerSpriteState.WallSliding)
     )
 }
+let TimeHeldA = 0
+let InGame = false
 let mySprite: Sprite = null
 tiles.setCurrentTilemap(tilemap`level1`)
 mySprite = platformer.create(assets.image`Main_Character_Base_Hitbox`, SpriteKind.Player)
 platformer.moveSprite(mySprite, true, 125)
 scene.cameraFollowSprite(mySprite)
 platformer.setFeatureEnabled(platformer.PlatformerFeatures.JumpOnUpPressed, true)
+platformer.setFeatureEnabled(platformer.PlatformerFeatures.JumpOnAPressed, false)
 platformer.setFeatureEnabled(platformer.PlatformerFeatures.MovementMomentum, true)
 platformer.setFeatureEnabled(platformer.PlatformerFeatures.WallJumps, true)
 platformer.setConstant(mySprite, platformer.PlatformerConstant.MaxJumpHeight, 48)
@@ -93,3 +101,32 @@ platformer.setConstant(mySprite, platformer.PlatformerConstant.MovementAccelerat
 platformer.setConstant(mySprite, platformer.PlatformerConstant.WallJumpKickoffVelocity, 25)
 platformer.setConstant(mySprite, platformer.PlatformerConstant.WallJumpHeight, 16)
 Animations()
+InGame = true
+forever(function () {
+    if (controller.A.isPressed()) {
+        platformer.moveSprite(mySprite, false)
+        if (game.runtime() - TimeHeldA > 300) {
+            if (platformer.hasState(mySprite, platformer.PlatformerSpriteState.FacingRight)) {
+                mySprite.setImage(assets.image`Charge_Shot_Right_1`)
+            }
+        } else if (game.runtime() - TimeHeldA > 1200) {
+            mySprite.setImage(assets.image`Charge_Shot_Right_2`)
+        } else if (game.runtime() - TimeHeldA > 1500) {
+            mySprite.setImage(assets.image`Charge_Shot_Right_3`)
+            extraEffects.createSpreadEffectOnAnchor(mySprite, extraEffects.createCustomSpreadEffectData(
+            [
+            8,
+            7,
+            9
+            ],
+            false,
+            extraEffects.createPresetSizeTable(ExtraEffectPresetShape.Cloud),
+            extraEffects.createPercentageRange(50, 100),
+            extraEffects.createPercentageRange(50, 100),
+            extraEffects.createTimeRange(200, 400)
+            ), -1, 48, 20)
+        } else {
+        	
+        }
+    }
+})
