@@ -5,7 +5,56 @@ enum ActionKind {
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (InGame) {
-        TimeHeldA = game.runtime()
+        timer.background(function () {
+            platformer.moveSprite(mySprite, false)
+            platformer.setCharacterAnimationsEnabled(mySprite, false)
+            for (let index = 0; index <= 1500; index++) {
+                if (controller.A.isPressed()) {
+                    if (index == 300) {
+                        if (platformer.hasState(mySprite, platformer.PlatformerSpriteState.FacingRight)) {
+                            mySprite.setImage(assets.image`Charge_Shot_Right_1`)
+                        }
+                    } else if (index == 1200) {
+                        mySprite.setImage(assets.image`Charge_Shot_Right_2`)
+                    } else if (index == 1500) {
+                        mySprite.setImage(assets.image`Charge_Shot_Right_3`)
+                        extraEffects.createSpreadEffectOnAnchor(mySprite, extraEffects.createCustomSpreadEffectData(
+                        [
+                        8,
+                        7,
+                        9
+                        ],
+                        true,
+                        [
+                        4,
+                        5,
+                        6,
+                        7
+                        ],
+                        extraEffects.createPercentageRange(50, 100),
+                        extraEffects.createPercentageRange(0, 50),
+                        extraEffects.createTimeRange(300, 500),
+                        0,
+                        -100,
+                        extraEffects.createPercentageRange(75, 100),
+                        -100,
+                        0,
+                        200
+                        ), 150, 30, 30)
+                    } else {
+                    	
+                    }
+                    pause(1)
+                } else {
+                    break;
+                }
+            }
+        })
+    }
+})
+controller.A.onEvent(ControllerButtonEvent.Released, function () {
+    if (InGame) {
+        platformer.moveSprite(mySprite, true)
     }
 })
 function Animations () {
@@ -82,7 +131,6 @@ function Animations () {
     platformer.rule(platformer.PlatformerSpriteState.FacingRight, platformer.PlatformerSpriteState.WallSliding)
     )
 }
-let TimeHeldA = 0
 let InGame = false
 let mySprite: Sprite = null
 tiles.setCurrentTilemap(tilemap`level1`)
@@ -103,30 +151,5 @@ platformer.setConstant(mySprite, platformer.PlatformerConstant.WallJumpHeight, 1
 Animations()
 InGame = true
 forever(function () {
-    if (controller.A.isPressed()) {
-        platformer.moveSprite(mySprite, false)
-        if (game.runtime() - TimeHeldA > 300) {
-            if (platformer.hasState(mySprite, platformer.PlatformerSpriteState.FacingRight)) {
-                mySprite.setImage(assets.image`Charge_Shot_Right_1`)
-            }
-        } else if (game.runtime() - TimeHeldA > 1200) {
-            mySprite.setImage(assets.image`Charge_Shot_Right_2`)
-        } else if (game.runtime() - TimeHeldA > 1500) {
-            mySprite.setImage(assets.image`Charge_Shot_Right_3`)
-            extraEffects.createSpreadEffectOnAnchor(mySprite, extraEffects.createCustomSpreadEffectData(
-            [
-            8,
-            7,
-            9
-            ],
-            false,
-            extraEffects.createPresetSizeTable(ExtraEffectPresetShape.Cloud),
-            extraEffects.createPercentageRange(50, 100),
-            extraEffects.createPercentageRange(50, 100),
-            extraEffects.createTimeRange(200, 400)
-            ), -1, 48, 20)
-        } else {
-        	
-        }
-    }
+	
 })
