@@ -2,7 +2,11 @@
     "name": "Untitled",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2",
+        "pxt-zoom": "github:kiwiphoenix364/pxt-zoom#v3.0.3",
+        "Timers": "github:microsoft/arcade-timers#v1.1.0",
+        "animation": "*"
     },
     "files": [
         "main.blocks",
