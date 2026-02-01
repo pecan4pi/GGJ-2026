@@ -6,7 +6,10 @@
         "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2",
         "pxt-zoom": "github:kiwiphoenix364/pxt-zoom#v3.0.3",
         "Timers": "github:microsoft/arcade-timers#v1.1.0",
-        "animation": "*"
+        "animation": "*",
+        "arcade-sprite-util": "github:jwunderl/arcade-sprite-util#master",
+        "arcade-platformer": "github:microsoft/arcade-platformer#v0.0.13",
+        "Extra Effects": "github:alexszeto/extra-effects#v3.1.0"
     },
     "files": [
         "main.blocks",
